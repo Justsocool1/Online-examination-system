@@ -1,3 +1,18 @@
 server:
   servlet:
-    context-path: online-examination-system
+    context-path: /online-examination-system/api
+  port: 7777
+spring:
+  datasource:
+    username: root
+    password: 333
+    url: jdbc:mysql://localhost:3306/online-examination-system?useUnicode=true&characterEncodeing=UTF-8&useSSL=false&serverTimeZone=UTC
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*Mapper.xml
+logging:
+  level:
+    com.lins.mapper: debug

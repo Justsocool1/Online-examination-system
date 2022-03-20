@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lins.mapper.PaperManageMapper">
+
+    <sql id="choiceQuestion">
+        select question, subject, score, section, level, '选择题' as type
+        from one_choice_question
+    </sql>
+    <sql id="fillQuestion">
+        select question, subject, score, section, level, '填空题' as type
+        from fill_question
+    </sql>
+    <sql id="judgeQuestion">
+        select question, subject, score, section, level, '判断题' as type
+        from judge_question
+    </sql>
+    <sql id="essayZQuestion">
+        select question, subject, score, section, level, '问答题' as type
+        from essay_question
+    </sql>
+
+    <insert id="addPaper">
+        insert into paper_manage (paperId,
+                                  questionType,
+                                  questionId)
+        values (#{paperId},
+                #{questionType},
+                #{questionId})
+    </insert>
+    <delete id="deletePaperByPaperId">
+        delete
+        from paper_manage
+        where paperId = #{paperId}
+    </delete>
+    <select id="getPapersByCondition" resultType="com.lins.vo.PaperVO">
+        <if test="questionType == null or questionType == ''">
+<!--            select a.question, a.subject, a.score, a.section, a.level, a.type-->
+<!--            (-->
+<!--            <include refid="choiceQuestion"></include>-->
+<!--            union-->
+<!--            <include refid="fillQuestion"></include>-->
+<!--            union-->
+<!--            <include refid="judgeQuestion"></include>-->
+<!--            union-->
+<!--            <include refid="essayZQuestion"></include>-->
+<!--            ) as a-->
+
+            SELECT
+            a.question,
+            a.subject,
+            a.score,
+            a.section,
+            a.level,
+            a.type
+            FROM
+            (
+            SELECT
+            question,
+            subject,
+            score,
+            section,
+            level,
+            '选择题' AS type
+            FROM
+            one_choice_question UNION
+            SELECT
+            question,
+            subject,
+            score,
+            section,
+            level,
+            '填空题' AS type
+            FROM
+            fill_question UNION
+            SELECT
+            question,
+            subject,
+            score,
+            section,
+            level,
+            '判断题' AS type
+            FROM
+            judge_question UNION
+            SELECT
+            question,
+            subject,
+            score,
+            section,
+            level,
+            '问答题' AS type
+            FROM
+            essay_question
+            ) AS a
+        </if>
+        <if test="questionType != null and questionType != '' and questionType == 1">
+            select question, subject, score, section, level, '选择题' as type
+            from one_choice_question
+        </if>
+        <if test="questionType != null and questionType != '' and questionType == 2">
+            select question, subject, score, section, level, '填空题' as type
+            from fill_question
+        </if>
+        <if test="questionType != null and questionType != '' and questionType == 3">
+            select question, subject, score, section, level, '判断题' as type
+            from judge_question
+        </if>
+        <if test="questionType != null and questionType != '' and questionType == 4">
+            select question, subject, score, section, level, '问答题' as type
+            from essay_question
+        </if>
+        <where>
+            <if test="subject != null and subject != ''">
+                and subject like CONCAT('%',#{subject},'%')
+            </if>
+            <if test="level != null">
+                and level = #{level}
+            </if>
+            <if test="section != null and section != ''">
+                and section like CONCAT('%',#{section},'%')
+            </if>
+        </where>
+
+    </select>
+</mapper>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lins.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.lins.entity.Student">
+        <id column="studentId" jdbcType="INTEGER" property="studentId"/>
+        <result column="studentName" jdbcType="VARCHAR" property="studentName"/>
+        <result column="grade" jdbcType="INTEGER" property="grade"/>
+        <result column="majorId" jdbcType="INTEGER" property="majorId"/>
+        <result column="clazzId" jdbcType="INTEGER" property="clazzId"/>
+        <result column="instituteId" jdbcType="INTEGER" property="instituteId"/>
+        <result column="tel" jdbcType="INTEGER" property="tel"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="pwd" jdbcType="INTEGER" property="pwd"/>
+        <result column="cardId" jdbcType="INTEGER" property="cardId"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="role" jdbcType="INTEGER" property="role"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        studentId
+        ,
+        studentName,
+        grade,
+        majorId,
+        clazzId,
+        instituteId,
+        tel,
+        email,
+        pwd,
+        cardId,
+        sex,
+        role
+    </sql>
+    <update id="updateStudentInfo">
+        update student
+        set studentId   = #{studentId},
+            studentName = #{studentName},
+            grade       = #{grade},
+            majorId     = #{majorId},
+            clazzId     = #{clazzId},
+            instituteId = #{instituteId},
+            tel         = #{tel},
+            email       = #{email},
+            sex         = #{sex}
+        where stuId = #{stuId}
+
+    </update>
+    <update id="resetTeacherPassword">
+        update teacher
+        set pwd = 333333
+        where id = #{teacherId}
+    </update>
+    <update id="resetStudentPassword">
+        update student
+        set pwd = 333333
+        where stuId = #{studentId}
+    </update>
+    <update id="updateTeacher">
+        update teacher
+        set teacherId   = #{teacherId},
+            teacherName = #{teacherName},
+            instituteId = #{instituteId},
+            sex         = #{sex},
+            tel         = #{tel},
+            email       = #{email},
+            cardId      = #{cardId},
+            type        = #{type}
+        where id = #{id}
+    </update>
+    <update id="updateTeacherPwd">
+        update teacher set pwd = #{password} where teacherId = #{id}
+    </update>
+    <update id="updateStudentPwd">
+        update student set pwd = #{password} where studentId = #{id}
+    </update>
+    <delete id="deleteStudentByStudentId">
+        delete
+        from student
+        where studentId = #{studentId}
+    </delete>
+    <delete id="deleteTeacherById">
+        delete
+        from teacher
+        where id = #{teacherId}
+    </delete>
+
+    <select id="adminLogin" resultType="com.lins.entity.Admin">
+        select *
+        from admin
+        where adminId = #{userId}
+          and pwd = #{password}
+    </select>
+    <select id="teacherLogin" resultType="com.lins.entity.Teacher">
+        select *
+        from teacher
+        where teacherId = #{userId}
+          and pwd = #{password}
+    </select>
+    <select id="studentLogin" resultType="com.lins.entity.Student">
+        select *
+        from student
+        where studentId = #{userId}
+          and pwd = #{password}
+    </select>
+    <select id="getInstitute" resultType="com.lins.entity.Institute">
+        select *
+        from institute_table
+    </select>
+    <select id="getMajorsByInstituteId" resultType="com.lins.entity.Major">
+        select *
+        from major_table
+        where instituteId = #{instituteId}
+    </select>
+    <select id="getClassesByMajorId" resultType="com.lins.entity.Clazz">
+        select *
+        from clazz_table
+        where majorId = #{majorId}
+    </select>
+    <select id="getStudentInfos" resultType="com.lins.entity.Student">
+        select
+        s.stuId,
+        s.studentId,
+        s.studentName,
+        s.grade,
+        m.major as majorId,
+        c.clazzName as clazzId,
+        i.institute as instituteId,
+        s.tel,
+        s.email,
+        s.pwd,
+        s.cardId,
+        s.sex,
+        s.role
+        from student as s
+        join institute_table as i
+        on s.instituteId = i.instituteId
+        join major_table as m
+        on s.majorId = m.majorId
+        join clazz_table as c
+        on s.clazzId = c.clazzId
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and studentId = #{studentId}
+            </if>
+            <if test="studentName != null and studentName != ''">
+                and studentName like CONCAT('%',#{studentName},'%')
+            </if>
+        </where>
+
+    </select>
+    <select id="getTeachers" resultType="com.lins.entity.Teacher">
+        select
+        t.id,
+        t.teacherId,
+        t.teacherName,
+        i.institute as instituteId,
+        t.sex,
+        t.tel,
+        t.email,
+        t.pwd,
+        t.cardId,
+        t.type,
+        t.role
+        from teacher as t
+        join institute_table as i
+        on t.instituteId = i.instituteId
+        <where>
+            <if test="teacherId != null and teacherId != ''">
+                and teacherId = #{teacherId}
+            </if>
+            <if test="teacherName != null and teacherName != ''">
+                and teacherName like CONCAT('%',#{teacherName},'%')
+            </if>
+        </where>
+
+    </select>
+    <select id="getSameStudentId" resultType="java.lang.Integer">
+        select studentId from student where studentId = #{userId}
+    </select>
+    <select id="getSameTeacherId" resultType="java.lang.Integer">
+        select teacherId from teacher where teacherId = #{userId}
+    </select>
+    <insert id="studentRegister">
+        insert into student (studentId,
+                             studentName,
+                             grade,
+                             majorId,
+                             clazzId,
+                             instituteId,
+                             tel,
+                             email,
+                             pwd,
+                             cardId,
+                             sex,
+                             role)
+            value ( #{studentId},
+            #{studentName},
+            #{grade},
+            #{majorId},
+            #{clazzId},
+            #{instituteId},
+            #{tel},
+            #{email},
+            #{pwd},
+            #{cardId},
+            #{sex},
+            2)
+
+    </insert>
+    <insert id="addTeacher">
+        insert into teacher (teacherId,
+                             teacherName,
+                             instituteId,
+                             sex,
+                             tel,
+                             email,
+                             pwd,
+                             cardId,
+                             type,
+                             role)
+        values (#{teacherId},
+                #{teacherName},
+                #{instituteId},
+                #{sex},
+                #{tel},
+                #{email},
+                #{pwd},
+                #{cardId},
+                #{type},
+                #{role})
+
+    </insert>
+    <!--    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+    <!--        select-->
+    <!--        <include refid="Base_Column_List"/>-->
+    <!--        from t_student-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </select>-->
+    <!--    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">-->
+    <!--        delete-->
+    <!--        from t_student-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </delete>-->
+    <!--    <insert id="insert" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        insert into t_student (id, name, age)-->
+    <!--        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})-->
+    <!--    </insert>-->
+    <!--    <insert id="insertSelective" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        insert into t_student-->
+    <!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+    <!--            <if test="id != null">-->
+    <!--                id,-->
+    <!--            </if>-->
+    <!--            <if test="name != null">-->
+    <!--                name,-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                age,-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+    <!--            <if test="id != null">-->
+    <!--                #{id,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--            <if test="name != null">-->
+    <!--                #{name,jdbcType=VARCHAR},-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                #{age,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--    </insert>-->
+    <!--    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        update t_student-->
+    <!--        <set>-->
+    <!--            <if test="name != null">-->
+    <!--                name = #{name,jdbcType=VARCHAR},-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                age = #{age,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--        </set>-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </update>-->
+    <!--    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        update t_student-->
+    <!--        set name = #{name,jdbcType=VARCHAR},-->
+    <!--            age  = #{age,jdbcType=INTEGER}-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </update>-->
+</mapper>

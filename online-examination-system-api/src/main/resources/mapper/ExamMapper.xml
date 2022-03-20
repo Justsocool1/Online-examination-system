@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lins.mapper.ExamMapper">
+
+    <sql id="selectFromExamManage">
+        select e.examCode,
+               e.description,
+               e.source,
+               e.paperId,
+               e.examDate,
+               e.examStartTime,
+               e.totalTime,
+               e.grade,
+               e.term,
+               m.major     as majorId,
+               i.institute as instituteId,
+               e.totalScore,
+               e.type,
+               e.tips
+        from exam_manage as e
+                 join major_table as m
+                      on e.majorId = m.majorId
+                 join institute_table as i
+                      on e.instituteId = i.instituteId
+    </sql>
+    <update id="updateExam">
+        update exam_manage
+        set description   = #{description},
+            source        = #{source},
+            examDate      = #{examDate},
+            examStartTime = #{examStartTime},
+            totalTime     = #{totalTime},
+            grade         = #{grade},
+            majorId       = #{majorId},
+            instituteId   = #{instituteId},
+            totalScore    = #{totalScore},
+            type          = #{type},
+            tips          = #{tips}
+        where examCode = #{examCode}
+    </update>
+    <select id="getExamsByExamCode" parameterType="integer" resultType="com.lins.entity.ExamManage">
+        <include refid="selectFromExamManage"></include>
+        where e.examCode = #{examCode}
+    </select>
+
+    <select id="getExamsLikeName" resultType="com.lins.entity.ExamManage">
+        <include refid="selectFromExamManage"></include>
+        where e.source like #{examName}
+    </select>
+
+    <select id="getExamsByPage" resultType="com.lins.entity.ExamManage">
+        <include refid="selectFromExamManage"></include>
+    </select>
+
+    <insert id="pushToTeacher">
+        insert into essay_question_to_teacher (examCode,
+                                               studentId,
+                                               studentName,
+                                               subject,
+                                               noEssayScore,
+                                               answerDate,
+                                               startTime,
+                                               endTime,
+                                               teqId)
+        values (#{examCode},
+                #{studentId},
+                #{studentName},
+                #{subject},
+                #{noEssayScore},
+                #{answerDate},
+                #{startTime},
+                #{endTime},
+                #{teqId})
+    </insert>
+
+    <select id="getNoEssayScoreExamInfo" resultType="com.lins.vo.EssayQuestionToTeacherVO">
+        select eqt.id,
+               eqt.examCode,
+               eqt.studentId,
+               eqt.studentName,
+               eqt.subject,
+               em.description,
+               i.institute,
+               m.major,
+               em.grade,
+               em.type,
+               eqt.noEssayScore,
+               eqt.answerDate,
+               eqt.startTime,
+               eqt.endTime,
+               eqt.teqId
+        from essay_question_to_teacher as eqt
+                 join exam_manage as em
+                      on eqt.examCode = em.examCode
+                 join institute_table as i
+                      on em.instituteId = i.instituteId
+                 join major_table as m
+                      on em.majorId = m.majorId
+    </select>
+
+    <insert id="insertStuExam">
+        insert into transfer_essay_question (teqId, questionId, stuAnswer)
+        values (#{teqId}, #{questionId}, #{stuAnswer})
+    </insert>
+
+    <insert id="addExam">
+        insert into exam_manage (description,
+                                 source,
+                                 paperId,
+                                 examDate,
+                                 examStartTime,
+                                 totalTime,
+                                 grade,
+                                 majorId,
+                                 instituteId,
+                                 totalScore,
+                                 type,
+                                 tips)
+        values (#{description},
+                #{source},
+                #{paperId},
+                #{examDate},
+                #{examStartTime},
+                #{totalTime},
+                #{grade},
+                #{majorId},
+                #{instituteId},
+                #{totalScore},
+                #{type},
+                #{tips})
+    </insert>
+
+    <select id="getEssays" resultType="com.lins.vo.TransferEssayQuestionVO">
+        select e.question, teq.stuAnswer
+        from transfer_essay_question as teq
+                 join essay_question as e on teq.questionId = e.questionId
+        where teq.teqId = #{teqId}
+    </select>
+    <select id="getLastExamPaperId" resultType="java.lang.Integer">
+        select paperId
+        from exam_manage
+        order by paperId desc limit 1
+    </select>
+    <select id="getChoiceQuestionIdBySubject" resultType="java.lang.Integer">
+        select questionId
+        from one_choice_question
+        where subject = #{subject}
+        order by rand() desc limit #{number}
+    </select>
+    <select id="getFillQuestionIdBySubject" resultType="java.lang.Integer">
+        select questionId
+        from fill_question
+        where subject = #{subject}
+        order by rand() desc limit #{number}
+    </select>
+    <select id="getJudgeQuestionIdBySubject" resultType="java.lang.Integer">
+        select questionId
+        from judge_question
+        where subject = #{subject}
+        order by rand() desc limit #{number}
+    </select>
+    <select id="getEssayQuestionIdBySubject" resultType="java.lang.Integer">
+        select questionId
+        from essay_question
+        where subject = #{subject}
+        order by rand() desc limit #{number}
+    </select>
+    <select id="getPaperIdByExamCode" resultType="java.lang.Integer">
+        select paperId from exam_manage where examCode = #{examCode}
+    </select>
+
+    <delete id="deleteEQT">
+        delete
+        from essay_question_to_teacher
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTEQ">
+        delete
+        from transfer_essay_question
+        where teqId = #{teqId}
+    </delete>
+    <delete id="deleteExamByExamCode">
+        delete from exam_manage where examCode = #{examCode}
+    </delete>
+
+
+    <!--    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+    <!--        select-->
+    <!--        <include refid="Base_Column_List"/>-->
+    <!--        from t_student-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </select>-->
+    <!--    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">-->
+    <!--        delete-->
+    <!--        from t_student-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </delete>-->
+    <!--    <insert id="insert" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        insert into t_student (id, name, age)-->
+    <!--        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})-->
+    <!--    </insert>-->
+    <!--    <insert id="insertSelective" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        insert into t_student-->
+    <!--        <trim prefix="(" suffix=")" suffixOverrides=",">-->
+    <!--            <if test="id != null">-->
+    <!--                id,-->
+    <!--            </if>-->
+    <!--            <if test="name != null">-->
+    <!--                name,-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                age,-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--        <trim prefix="values (" suffix=")" suffixOverrides=",">-->
+    <!--            <if test="id != null">-->
+    <!--                #{id,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--            <if test="name != null">-->
+    <!--                #{name,jdbcType=VARCHAR},-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                #{age,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--    </insert>-->
+    <!--    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        update t_student-->
+    <!--        <set>-->
+    <!--            <if test="name != null">-->
+    <!--                name = #{name,jdbcType=VARCHAR},-->
+    <!--            </if>-->
+    <!--            <if test="age != null">-->
+    <!--                age = #{age,jdbcType=INTEGER},-->
+    <!--            </if>-->
+    <!--        </set>-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </update>-->
+    <!--    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.springboot.model.Student">-->
+    <!--        update t_student-->
+    <!--        set name = #{name,jdbcType=VARCHAR},-->
+    <!--            age  = #{age,jdbcType=INTEGER}-->
+    <!--        where id = #{id,jdbcType=INTEGER}-->
+    <!--    </update>-->
+</mapper>
