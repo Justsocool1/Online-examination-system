@@ -117,7 +117,10 @@ export default {
           ...this.formLabelAlign
         }
       }).then(res =>{
-        let resData = res.data.data
+        let resData = res.data.data["userInfo"];
+        let tokenData = res.data.data["token"];
+        console.log("token",tokenData);
+        console.log("resData",resData)
         if(res.data.success == true){
         console.log(resData)
         switch(resData.role){
@@ -125,18 +128,21 @@ export default {
              this.$cookies.set("cname",resData.adminName)
              this.$cookies.set("cid",resData.adminId)
              this.$cookies.set("role",resData.role)
+             localStorage.setItem("token",tokenData);
              this.$router.push({path: "/index"})
              break;
           case "1":
              this.$cookies.set("cname",resData.teacherName)
              this.$cookies.set("cid",resData.teacherId)
              this.$cookies.set("role",resData.role)
+             localStorage.setItem("token",tokenData);
              this.$router.push({path: "/index"})
              break;
           case "2":
              this.$cookies.set("cname",resData.studentName)
              this.$cookies.set("cid",resData.studentId)
              this.$cookies.set("role",resData.role)
+             localStorage.setItem("token",tokenData);
              this.$router.push({path: "/student"})
              break;
         }

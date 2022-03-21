@@ -1,11 +1,18 @@
 package com.lins.config;
 
+import com.lins.interceptor.TokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
+    // 注入 token 拦截器
+    @Resource
+    private TokenInterceptor interceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -21,4 +28,10 @@ public class MyWebConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+//        WebMvcConfigurer.super.addInterceptors(registry);
+        // 添加自定义拦截器，并拦截对应 url"
+        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/user/login");
+    }
 }

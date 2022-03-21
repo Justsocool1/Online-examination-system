@@ -40,6 +40,8 @@ echarts.use([
     LegendComponent
   ]);
   
+  
+
 
 const app = createApp(App)
 app.use(ElementPlus)

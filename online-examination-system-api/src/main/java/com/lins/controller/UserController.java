@@ -6,11 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lins.common.ResponseResult;
 import com.lins.entity.*;
 import com.lins.service.UserService;
-import lombok.extern.log4j.Log4j;
-import org.springframework.util.ObjectUtils;
+import com.lins.utils.TokenUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,23 +27,34 @@ public class UserController {
             String role = login.getRole();
             login.setUserId(login.getUserId().trim());
             login.setPassword(login.getPassword().trim());
+            Map<String,Object> map = new HashMap<>();
+            String token = "";
             switch (role) {
                 case "0":
                     Admin adminRes = (Admin) userService.userLogin(login);
                     if (null != adminRes) {
-                        return new ResponseResult(200, true, "", adminRes);
+                        token = TokenUtil.sign(login);
+                        map.put("token",token);
+                        map.put("userInfo",adminRes);
+                        return new ResponseResult(200, true, "", map);
                     }
                     break;
                 case "1":
                     Teacher teacherRes = (Teacher) userService.userLogin(login);
                     if (null != teacherRes) {
-                        return new ResponseResult(200, true, "", teacherRes);
+                        token = TokenUtil.sign(login);
+                        map.put("token",token);
+                        map.put("userInfo",teacherRes);
+                        return new ResponseResult(200, true, "", map);
                     }
                     break;
                 case "2":
                     Student studentRes = (Student) userService.userLogin(login);
                     if (null != studentRes) {
-                        return new ResponseResult(200, true, "", studentRes);
+                        token = TokenUtil.sign(login);
+                        map.put("token",token);
+                        map.put("userInfo",studentRes);
+                        return new ResponseResult(200, true, "", map);
                     }
                     break;
                 default:
