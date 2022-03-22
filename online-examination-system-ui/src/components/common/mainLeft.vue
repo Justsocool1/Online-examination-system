@@ -13,7 +13,12 @@
       menu-trigger="click" router>
       <el-sub-menu v-for="(item,index) in menu" :index='item.index' :key="index">
             <template v-slot:title>
-              <user-outlined v-if="item.title == '学生管理'"  :style="{fontSize: '23px', color: 'white'}"/>
+              <!-- <user-outlined v-if="item.title == '学生管理'"  :style="{fontSize: '23px', color: 'white'}"/> -->
+              <icon-font type="icon-kaoshi" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '考试管理'" />
+              <icon-font type="icon-exam_item_bank" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '题库管理'" />
+              <icon-font type="icon-chengji" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '成绩查询'" />
+              <icon-font type="icon-yewutubiao_xueshengchaxun" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '学生管理'" />
+              <icon-font type="icon-jiaoshi" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '教师管理'" />
               <span  class="title">{{item.title}}</span>
             </template>
             <el-menu-item-group v-for="(list,index1) in item.content" :key="index1">
@@ -32,6 +37,10 @@ import store from "@/store/index";
 import {mapState} from 'vuex'
 import bus from '@/utils/bus.js'
 import { UserOutlined } from '@ant-design/icons-vue';
+import { createFromIconfontCN } from '@ant-design/icons-vue';
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+});
 export default {
   name: "mainLeft",
   data() {
@@ -40,7 +49,8 @@ export default {
     }
   },
   components:{
-    UserOutlined
+    UserOutlined,
+    IconFont
   },
   computed: mapState(["flag","menu"]),
   created() {

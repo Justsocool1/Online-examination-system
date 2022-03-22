@@ -39,7 +39,7 @@ import { request } from '@/utils/request'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { createFromIconfontCN,SettingFilled } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_zldbsmw393.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
 });
 export default {
   // name: 'myExam'

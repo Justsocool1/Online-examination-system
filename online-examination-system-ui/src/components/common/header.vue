@@ -20,7 +20,7 @@
                 <!-- <li><a href="javascript:;">用户信息</a></li> -->
                 <li><a href="javascript:;" @click="manage()">修改密码</a></li>
                 <p></p>
-                <li class="exit" @click="exit()"><a href="javascript:;">退出</a></li>
+                <li class="exit" @click="exit()"><a href="javascript:;">退出登录</a></li>
               </ul>
             </div>
           </transition>
@@ -35,7 +35,7 @@ import store from "@/store";
 import {mapState,mapMutations} from 'vuex'
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_zldbsmw393.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
 });
 export default {
   data() {
@@ -165,7 +165,7 @@ export default {
   right: 0px;
   background-color: #fff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  padding: 12px;
+  padding: 18px;
 }
 .user .out ul {
   list-style: none;
