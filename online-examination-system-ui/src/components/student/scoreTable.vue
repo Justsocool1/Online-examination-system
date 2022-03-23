@@ -1,7 +1,7 @@
 //显示学生成绩
 <template>
   <div class="table">
-    <p class="title">我的分数</p>
+    <div class="title"><icon-font type="icon-shijuanguanlix" :style="{fontSize: '23px', color: 'white'}"/>我的分数</div>
     <section class="content-el">
       <el-table ref="filterTable" :data="score" v-loading="loading">
         <el-table-column
@@ -46,7 +46,17 @@
 
 <script>
 import { request } from '@/utils/request'
+import { SearchOutlined } from '@ant-design/icons-vue';
+import { createFromIconfontCN,SettingFilled } from '@ant-design/icons-vue';
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
+});
 export default {
+    components: {
+    IconFont,
+    SearchOutlined,
+    SettingFilled
+},
   data() {
     return {
       pagination: { //分页后的留言列表

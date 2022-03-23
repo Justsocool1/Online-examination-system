@@ -13,17 +13,19 @@
         <i class="el-icon-menu" @click="toggle()"></i>
         <div class="user">
           <span>{{user.userName}}</span>
-          <img src="@/assets/img/avatar.png" class="user-img" ref="img" @click="showSetting()" />
-          <transition name="fade">
-            <div class="out" ref="out" v-show="login_flag">
-              <ul>
-                <!-- <li><a href="javascript:;">用户信息</a></li> -->
-                <li><a href="javascript:;" @click="manage()">修改密码</a></li>
-                <p></p>
-                <li class="exit" @click="exit()"><a href="javascript:;">退出登录</a></li>
-              </ul>
-            </div>
-          </transition>
+          <a-dropdown :placement="placement">
+              <img src="@/assets/img/avatar.png" class="user-img" ref="img"/>
+              <template #overlay>
+                  <a-menu>
+                  <a-menu-item>
+                    <a href="javascript:;" @click="manage()">修改密码</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:;" @click="exit()">退出登录</a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+      </a-dropdown>
         </div>
       </el-col>
     </el-row>
@@ -35,12 +37,11 @@ import store from "@/store";
 import {mapState,mapMutations} from 'vuex'
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
 });
 export default {
   data() {
     return {
-      login_flag: false,
       user: { //用户信息
         userName: null,
         userId: null
@@ -55,10 +56,6 @@ export default {
   },
   computed: mapState(["flag","menu"]),
   methods: {
-    //显示、隐藏退出按钮
-    showSetting() {
-      this.login_flag = !this.login_flag
-    },
     //左侧栏放大缩小
     ...mapMutations(["toggle"]),
     getUserInfo() { //获取用户信息

@@ -1,7 +1,7 @@
 // 我的试卷页面
 <template>
   <div id="myExam">
-    <div class="title"><icon-font type="icon-shijuanguanli"/>我的试卷</div>
+    <div class="title"><icon-font type="icon-shijuanguanli" :style="{fontSize: '23px', color: 'white'}"/>我的试卷</div>
     <div class="wrapper">
       <ul class="top">
         <li class="order">试卷列表</li>
@@ -39,7 +39,7 @@ import { request } from '@/utils/request'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { createFromIconfontCN,SettingFilled } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
 });
 export default {
   // name: 'myExam'

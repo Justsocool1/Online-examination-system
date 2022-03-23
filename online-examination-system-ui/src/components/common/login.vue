@@ -13,10 +13,10 @@
             <p class="title">账号登录</p>
             <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" :rules="rules" ref="formLabelAlign">
               <el-form-item label="账号" prop="userId">
-                <el-input v-model.number="formLabelAlign.userId" placeholder="请输入学号或工号"></el-input>
+                <el-input v-model.number="formLabelAlign.userId" placeholder="请输入学号或工号" @keydown.enter="submitForm('formLabelAlign')"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
-                <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type='password'></el-input>
+                <el-input v-model="formLabelAlign.password" placeholder="请输入密码" type='password' @keydown.enter="submitForm('formLabelAlign')"></el-input>
               </el-form-item>
               <el-form-item label="角色" prop="role">  
               <a-radio-group v-model:value="formLabelAlign.role" name="role">
@@ -60,7 +60,7 @@ import {request} from '@/utils/request'
 import {ElMessage} from 'element-plus';
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
 });
 export default {
   store,
@@ -117,11 +117,11 @@ export default {
           ...this.formLabelAlign
         }
       }).then(res =>{
+        if(res.data.success){
         let resData = res.data.data["userInfo"];
         let tokenData = res.data.data["token"];
         console.log("token",tokenData);
         console.log("resData",resData)
-        if(res.data.success == true){
         console.log(resData)
         switch(resData.role){
            case "0":

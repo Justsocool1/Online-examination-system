@@ -21,7 +21,7 @@ public class MyWebConfig implements WebMvcConfigurer {
 //                是否允许证书
                 .allowCredentials(true)
 //                设置允许跨域请求的域名
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("http://192.168.123.219:8080","http://localhost:8080")
                 .allowedMethods("POST", "GET", "DELETE", "PUT", "OPTIONS")
                 .allowedHeaders("*")
 //                跨域允许时间

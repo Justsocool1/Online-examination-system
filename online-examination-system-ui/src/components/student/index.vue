@@ -8,23 +8,28 @@
           <li class="logo" >
             <icon-font id="examIcon" type="icon-zhihuikaoshi" :style="{fontSize: '40px'}"/><span id="examName">ONLINE-EXAM-SYSTEM</span>
           </li>
-          <li><icon-font type="icon-shijuanguanli" /><a href="javascript:;" @click="exam()">我的试卷</a></li>
+          <li><icon-font type="icon-shijuanguanli" :style="{fontSize: '23px', color: 'white'}"/><a href="javascript:;" @click="exam()">我的试卷</a></li>
           <!-- <li><a href="javascript:;" @click="practice()">我的练习</a></li> -->
-          <li><icon-font type="icon-shijuanguanlix"/><router-link to="/student/scoreTable">我的分数</router-link></li>
+          <li><icon-font type="icon-shijuanguanlix" :style="{fontSize: '23px', color: 'white'}"/><router-link to="/student/scoreTable">我的分数</router-link></li>
           <li
             class="right"
-            @mouseenter="flag = !flag"
-            @mouseleave="flag = !flag"
           >
-            <a href="javascript:;">
+          <a-dropdown :placement="placement">
+              <a href="javascript:;">
               <!-- <i class="iconfont icon-Userselect icon"></i> -->
-              <a-avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              {{ user.userName }}</a
-            >
-            <div class="msg" v-if="flag">
-              <p @click="manage()">管理中心</p>
-              <p class="exit" @click="exit()">退出</p>
-            </div>
+              <a-avatar src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2Ffd%2Ff1%2Fda%2Ffdf1dacb8ff0b8f13ed29bcbee42f328.jpeg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1650619218&t=8dbd41de8be9c6b201257252af653c16" />
+              {{ user.userName }}</a>
+              <template #overlay>
+                  <a-menu>
+                  <a-menu-item>
+                    <a href="javascript:;" @click="manage()">修改密码</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a href="javascript:;" @click="exit()">退出登录</a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+      </a-dropdown>
           </li>
         </ul>
       </el-col>
@@ -44,7 +49,7 @@ import { createFromIconfontCN } from '@ant-design/icons-vue';
 import store from "@/store";
 import { mapState } from "vuex";
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
 });
 export default {
   store,
@@ -54,7 +59,6 @@ export default {
   },
   data() {
     return {
-      flag: false,
       user: {},
       
     };

@@ -14,18 +14,14 @@
       <el-sub-menu v-for="(item,index) in menu" :index='item.index' :key="index">
             <template v-slot:title>
               <!-- <user-outlined v-if="item.title == '学生管理'"  :style="{fontSize: '23px', color: 'white'}"/> -->
-              <icon-font type="icon-kaoshi" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '考试管理'" />
-              <icon-font type="icon-exam_item_bank" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '题库管理'" />
-              <icon-font type="icon-chengji" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '成绩查询'" />
-              <icon-font type="icon-yewutubiao_xueshengchaxun" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '学生管理'" />
-              <icon-font type="icon-jiaoshi" :style="{fontSize: '23px', color: 'white'}" v-if="item.title == '教师管理'" />
+              <icon-font :type="item.type" :style="{fontSize: '23px', color: 'white'}" />
               <span  class="title">{{item.title}}</span>
             </template>
             <el-menu-item-group v-for="(list,index1) in item.content" :key="index1">
-            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item1 != null">{{list.item1}}</el-menu-item>
-            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item2 != null">{{list.item2}}</el-menu-item>
-            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item3 != null">{{list.item3}}</el-menu-item>
-            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item4 != null">{{list.item4}}</el-menu-item>
+            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item1 != null"><icon-font :type="list.type" :style="{fontSize: '23px', color: 'white'}" /> &nbsp{{list.item1}}</el-menu-item>
+            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item2 != null"><icon-font :type="list.type" :style="{fontSize: '23px', color: 'white'}" /> &nbsp{{list.item2}}</el-menu-item>
+            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item3 != null"><icon-font :type="list.type" :style="{fontSize: '23px', color: 'white'}" /> &nbsp{{list.item3}}</el-menu-item>
+            <el-menu-item @click="handleTitle(item.index)" :index="list.path" v-if="list.item4 != null"><icon-font :type="list.type" :style="{fontSize: '23px', color: 'white'}" /> &nbsp{{list.item4}}</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
     </el-menu>
@@ -39,7 +35,7 @@ import bus from '@/utils/bus.js'
 import { UserOutlined } from '@ant-design/icons-vue';
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_hljikdspxpw.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
 });
 export default {
   name: "mainLeft",
@@ -74,7 +70,8 @@ export default {
         this.menu.push({
           index: '5',
           title: '教师管理',
-          content:[{item1:'教师管理',path:'/index/teacherManage'},{item2: '添加教师',path: '/index/addTeacher'}],
+          type: "icon-jiaoshi",
+          content:[{item1:'教师管理',type: "icon-jiaoshiguanli",path:'/index/teacherManage'},{item2: '添加教师',type: "icon-tianjiajiaoshi",path: '/index/addTeacher'}],
         })
       }
     }
