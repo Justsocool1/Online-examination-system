@@ -17,7 +17,7 @@
               <img src="@/assets/img/avatar.png" class="user-img" ref="img"/>
               <template #overlay>
                   <a-menu>
-                  <a-menu-item>
+                  <a-menu-item v-if="flag">
                     <a href="javascript:;" @click="manage()">修改密码</a>
                   </a-menu-item>
                   <a-menu-item>
@@ -37,15 +37,17 @@ import store from "@/store";
 import {mapState,mapMutations} from 'vuex'
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
 });
 export default {
   data() {
     return {
       user: { //用户信息
         userName: null,
-        userId: null
-      } 
+        userId: null,
+        role: null,
+      },
+      flag: true, 
     }
   },
   components: {
@@ -53,6 +55,7 @@ export default {
 },
   created() {
     this.getUserInfo()
+    
   },
   computed: mapState(["flag","menu"]),
   methods: {
@@ -61,13 +64,18 @@ export default {
     getUserInfo() { //获取用户信息
       let userName = this.$cookies.get("cname")
       let userId = this.$cookies.get("cid")
+      let role = this.$cookies.get("role");
       this.user.userName = userName
       this.user.userId = userId
+      this.user.role = role;
+      role == 0 ? this.flag = false : this.flag = true;
     },
     index() {
       this.$router.push({path: '/index'})
     },
     exit() {
+      console.log("退出登录清除token ---header");
+      localStorage.removeItem("token");
       let role = this.$cookies.get("role")
       this.$router.push({path:"/"}) //跳转到登录页面
       this.$cookies.remove("cname") //清除cookie

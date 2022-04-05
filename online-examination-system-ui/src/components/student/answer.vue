@@ -4,16 +4,13 @@
     <!--顶部信息栏-->
      <div class="top">
        <ul class="item">
-         <li><i class="iconfont icon-menufold icon20" ref="toggle" @click="slider_flag = !slider_flag"></i></li>
          <li>{{examData.type}}-{{examData.source}}</li>
-         <li @click="flag = !flag">
-           <i class="iconfont icon-user icon20"></i>
-           <div class="msg"  v-if="flag" @click="flag = !flag">
-             <p>学生姓名：{{userInfo.name}}</p>
-             <p>学号:  {{userInfo.id}}</p>
-           </div>
+         &nbsp&nbsp
+          <li><icon-font type="icon-yincang" @click="slider_flag = !slider_flag" :style="{fontSize: '23px',color: 'white'}"/></li>
+         <li>
+           学生姓名：{{userInfo.name}} <b/><b/>
+             学号:  {{userInfo.id}}
          </li>
-         <li><i class="iconfont icon-arrLeft icon20"></i></li>
        </ul>
      </div>
      <div class="flexarea">
@@ -186,8 +183,16 @@ import { request } from '@/utils/request'
 import store from '@/store/index'
 import {mapState} from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { createFromIconfontCN } from '@ant-design/icons-vue';
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
+});
+
 export default {
   store,
+  components: {
+    IconFont
+},
   data() {
     return {
       startTime: null, //考试开始时间
@@ -198,7 +203,6 @@ export default {
       bg_flag: false, //已答标识符,已答改变背景色
       isFillClick: false, //选择题是否点击标识符
       slider_flag: true, //左侧显示隐藏标识符
-      flag: false, //个人信息显示隐藏标识符
       currentType: 1, //当前题型类型  1--选择题  2--填空题  3--判断题  4--问答题
       radio: [], //保存考生所有选择题的选项
       title: "请选择正确的选项",
@@ -231,6 +235,14 @@ export default {
     this.getCookies()
     this.getExamData()
     this.showTime()
+  },
+  beforeRouteLeave (to, from, next) {
+  // ...
+  // alert("确认离开页面？");
+  console.log("离开页面")
+   console.log("to",to)
+   console.log("from",from)
+   console.log("next",next);
   },
   methods: {
     getMyTime(date) { //日期格式化
@@ -304,39 +316,6 @@ export default {
               console.log("showAnswer",this.showAnswer)
             });
       });
-      // this.$axios(`/api/exam/${examCode}`).then(res => {  //通过examCode请求试卷详细信息
-      //   this.examData = { ...res.data.data} //获取考试详情
-      //   this.index = 0
-      //   this.time = this.examData.totalScore //获取分钟数
-      //   let paperId = this.examData.paperId
-        
-      //   this.$axios(`/api/paper/${paperId}`).then(res => {  //通过paperId获取试题题目信息
-      //     this.topic = {...res.data}
-      //     let reduceAnswer = this.topic[1][this.index]
-      //     this.reduceAnswer = reduceAnswer
-      //     let keys = Object.keys(this.topic) //对象转数组
-      //     keys.forEach(e => {
-      //       let data = this.topic[e]
-      //       this.topicCount.push(data.length)
-      //       let currentScore = 0
-      //       for(let i = 0; i< data.length; i++) { //循环每种题型,计算出总分
-      //         currentScore += data[i].score
-      //       }
-      //       this.score.push(currentScore) //把每种题型总分存入score
-      //     })
-      //     let len = this.topicCount[1]
-      //     let father = []
-      //     for(let i = 0; i < len; i++) { //根据填空题数量创建二维空数组存放每道题答案
-      //       let children = [null,null,null,null]
-      //       father.push(children)
-      //     }
-      //     this.fillAnswer = father
-      //     let dataInit = this.topic[1]
-      //     this.number = 1
-      //     this.showQuestion = dataInit[0].question
-      //     this.showAnswer = dataInit[0]
-      //   })
-      // })
     },
     change(index) { //选择题
       this.index = index
@@ -594,7 +573,7 @@ export default {
           let subject = this.examData.source;
           
           //提交成绩信息
-          request({
+         request({
             url: '/exam/pushToTeacher',
             method: 'post',
             data: {
@@ -611,31 +590,14 @@ export default {
           }).then(res => {
             if(res.data.success){
             this.$router.push({path: "/result"})
+            return 1;
             } else {
               console.log(res.data.message);
             this.$router.push({path: "/failResult"})
+            return 0;
             }
 
           })
-          // this.$axios({
-          //   url: '/api/score',
-          //   method: 'post',
-          //   data: {
-          //     examCode: this.examData.examCode, //考试编号
-          //     studentId: this.userInfo.id, //学号
-          //     subject: this.examData.source, //课程名称
-          //     etScore: finalScore, //答题成绩
-          //     answerDate: answerDate, //答题日期
-          //   }
-          // }).then(res => {
-          //   if(res.data.code == 200) {
-          //     this.$router.push({path:'/studentScore',query: {
-          //       score: finalScore, 
-          //       startTime: this.startTime,
-          //       endTime: this.endTime
-          //     }})
-          //   }  
-          // })
         }).catch(() => {
           console.log("继续答题")
         })

@@ -84,9 +84,8 @@ export default defineComponent({
       },
     };
 
-    const handleFinish = values => {
+    const handleFinish = (values) => {
       console.log(values, formState);
-
       console.log("id",route.query.studentId);
       console.log("pwd",formState.pass)
       request({
@@ -105,6 +104,8 @@ export default defineComponent({
       }).catch((err) => {
         
       });
+      console.log("修改成功并清除token");
+      localStorage.removeItem("token");
 
     };
 

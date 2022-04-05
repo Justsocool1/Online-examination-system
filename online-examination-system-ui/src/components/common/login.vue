@@ -29,7 +29,7 @@
                 <el-button type="primary" class="row-login" @click="submitForm('formLabelAlign')">登录</el-button>
               </div>
               <div class="options">
-                <p class="find" ><a @click="forgetPwd">找回密码</a></p>
+                <p class="find" ><a @click="this.$alert('请联系管理员或任课老师','提示',{confirmButtonText: '确定'})">找回密码</a></p>
                 <div class="register">
                   <span>没有账号?</span>
                   <span><a @click="register">去注册</a></span>
@@ -38,11 +38,6 @@
             </el-form>
           </div>
         </div>
-      </el-col>
-    </el-row>
-    <el-row class="footer">
-      <el-col>
-        <p class="msg2" hidden>版权所有 ©2019 <!--重庆文理学院计科2班余晓江--> 保留所有权利  <a href="http://beian.miit.gov.cn/" target="_blank">渝ICP备19001371号</a></p>
       </el-col>
     </el-row>
     <section class="remind">
@@ -60,7 +55,7 @@ import {request} from '@/utils/request'
 import {ElMessage} from 'element-plus';
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
 });
 export default {
   store,
@@ -155,9 +150,6 @@ export default {
     },
     clickTag(key) {
       this.role = key
-    },
-    forgetPwd(){
-      alert("请联系管理员或任课老师")
     },
     register(){
      this.$router.push({path: "/register"})

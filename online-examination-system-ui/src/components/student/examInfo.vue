@@ -113,7 +113,8 @@ export default {
           let startTime = this.parseDate(this.examStartTime);
           // startTime = this.parseDate("2019/3/21 16:00:00")
           let nowTime = new Date();
-          nowTime = this.parseDate("2019/3/21 16:01:00");
+          console.log("now",nowTime);
+          // nowTime = this.parseDate("2019/3/21 16:01:00");
           this.examStartFlag = this.comparingDate(startTime,nowTime)
 
         //   let testTime = this.parseDate("2022/3/13 16:30:00");

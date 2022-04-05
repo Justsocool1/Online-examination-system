@@ -35,7 +35,7 @@ import bus from '@/utils/bus.js'
 import { UserOutlined } from '@ant-design/icons-vue';
 import { createFromIconfontCN } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
 });
 export default {
   name: "mainLeft",

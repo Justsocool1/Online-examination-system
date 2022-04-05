@@ -49,7 +49,7 @@ import { createFromIconfontCN } from '@ant-design/icons-vue';
 import store from "@/store";
 import { mapState } from "vuex";
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_mjngakypcso.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
 });
 export default {
   store,
@@ -73,6 +73,8 @@ export default {
   methods: {
     exit() {
       //退出登录
+      console.log("退出登录清除token ---index");
+      localStorage.removeItem("token");
       this.$router.push({ path: "/" }); //跳转到登录页面
       this.$cookies.remove("cname"); //清除cookie
       this.$cookies.remove("cid");
