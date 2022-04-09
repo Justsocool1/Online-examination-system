@@ -14,6 +14,10 @@ import com.lins.vo.TransferEssayQuestionVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,4 +195,22 @@ public class ExamController {
 
     }
 
+    @GetMapping("/getNetworkTime")
+    public ResponseResult getNetworkTime(){
+        try {
+            // 取得资源对象
+            URL url = new URL("https://www.baidu.com");
+            URLConnection uc = url.openConnection();
+            // 发出连接
+            uc.connect();
+            // 读取网站日期时间
+            Long ld = uc.getDate();
+            Date date = new Date(ld);
+            System.out.println(date.toString());
+            return new ResponseResult(200,true,"",ld);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseResult(404,false,"",null);
+    }
 }

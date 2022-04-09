@@ -88,6 +88,7 @@ export default {
       },
       examStartTime: "", //考试开始时间
       examStartFlag: false,
+      nowTime: ""   //当前时间
     }
   },
   mounted() {
@@ -103,7 +104,7 @@ export default {
           params: {
             examCode: examCode
           }
-      }).then((res) => {
+      }).then(async (res) => {
           let resData = res.data.data[0];
           console.log(resData)
           this.examStartTime = String(resData.examStartTime);
@@ -112,10 +113,12 @@ export default {
 
           let startTime = this.parseDate(this.examStartTime);
           // startTime = this.parseDate("2019/3/21 16:00:00")
-          let nowTime = new Date();
-          console.log("now",nowTime);
-          // nowTime = this.parseDate("2019/3/21 16:01:00");
-          this.examStartFlag = this.comparingDate(startTime,nowTime)
+          // let nowTime = new Date();
+          await this.getRealTime();
+          console.log("now",this.nowTime);
+          this.nowTime = this.parseDate("2019/3/21 16:01:00");
+
+          this.examStartFlag = this.comparingDate(startTime,this.nowTime);
 
         //   let testTime = this.parseDate("2022/3/13 16:30:00");
         //   console.log("测试时间",testTime);
@@ -165,6 +168,26 @@ export default {
           })
       }).catch((err) => {
           
+      });
+    },
+   async getRealTime(){
+     await request({
+        url: "/exam/getNetworkTime",
+        method: "get"
+      }).then(async res => {
+        console.log("res",res)
+        let time;
+        if(res.data.success){
+          console.log("获取的时间",res.data.data);
+         let time = new Date(res.data.data);
+          console.log("这个时间",time);
+          this.nowTime = time;
+        } else {
+          console.log("获取时间失败改用本地时间", new Date());
+          this.nowTime = new Date() ;  //获取失败，使用本地系统时间
+        }
+      }).catch((err) => {
+        
       });
     },
     toAnswer(id) {

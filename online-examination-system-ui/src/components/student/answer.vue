@@ -83,7 +83,7 @@
           <div class="title">
             <p>{{title}}</p>
             <i class="iconfont icon-right auto-right"></i>
-            <span>全卷共{{topicCount[0] + topicCount[1] + topicCount[2] + topicCount[3]}}题  <i class="iconfont icon-time"></i>倒计时：<b>{{time}}</b>分钟</span>
+            <span>全卷共{{topicCount[0] + topicCount[1] + topicCount[2] + topicCount[3]}}题 &nbsp&nbsp  <hourglass-outlined  spin />倒计时：<b>{{time}}</b>分钟</span>
           </div>
           <div class="content">
             <p class="topic"><span class="number">{{number}}</span>{{showQuestion}}</p>
@@ -183,15 +183,16 @@ import { request } from '@/utils/request'
 import store from '@/store/index'
 import {mapState} from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { createFromIconfontCN } from '@ant-design/icons-vue';
+import { createFromIconfontCN,HourglassOutlined } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ji93tnzull.js',
 });
 
 export default {
   store,
   components: {
-    IconFont
+    IconFont,
+    HourglassOutlined
 },
   data() {
     return {
@@ -237,12 +238,19 @@ export default {
     this.showTime()
   },
   beforeRouteLeave (to, from, next) {
-  // ...
-  // alert("确认离开页面？");
+  // ... 
   console.log("离开页面")
-   console.log("to",to)
-   console.log("from",from)
+  console.log("from",from)
    console.log("next",next);
+  //  alert("确认离开页面？");
+   console.log("to",to)
+   if(to.path.indexOf("/result") != -1 || to.path.indexOf("/failResult") != -1 ){
+     next(true);
+   } else {
+     console.log("除交卷之外的其它离开考试页面的操作");
+     this.commit();
+     next(false);
+   }
   },
   methods: {
     getMyTime(date) { //日期格式化
@@ -258,9 +266,6 @@ export default {
     getCookies() {  //获取cookie
       this.userInfo.name = this.$cookies.get("cname")
       this.userInfo.id = this.$cookies.get("cid")
-    },
-    calcuScore() { //计算答题分数
-      
     },
     getExamData() { //获取当前试卷所有信息
       let date = new Date()

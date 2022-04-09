@@ -49,7 +49,7 @@ import { createFromIconfontCN } from '@ant-design/icons-vue';
 import store from "@/store";
 import { mapState } from "vuex";
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_3260262_ees17zskgzm.js',
+  scriptUrl: '//at.alicdn.com/t/font_3260262_ji93tnzull.js',
 });
 export default {
   store,
