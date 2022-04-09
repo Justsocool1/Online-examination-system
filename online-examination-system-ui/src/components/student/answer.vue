@@ -61,15 +61,16 @@
                 <p>填空题部分</p>
                 <ul>
                   <li v-for="(list, index2) in topic[2]" :key="index2">
-                    <a href="javascript:;" @click="fill(index2)" :class="{'border': index == index2 && currentType == 2,'bg': fillAnswer[index2][3] == true}"><span :class="{'mark': topic[2][index2].isMark == true}"></span>{{topicCount[0]+topicCount[1]+index2+1}}</a>
+                    <a href="javascript:;" @click="fill(index2)" :class="{'border': index == index2 && currentType == 2,'bg': fillAnswer[index2][3] ? true : false}"><span :class="{'mark': topic[2][index2].isMark == true }"></span>{{topicCount[0]+topicCount[1]+index2+1}}</a>
                   </li>
                 </ul>
               </div> 
+
               <div class="item">
                 <p>问答题部分</p>
                 <ul>
                   <li v-for="(list, index4) in topic[4]" :key="index4">
-                    <a href="javascript:;" @click="essay(index4)" :class="{'border': index == index4 && currentType == 4,'bg': essayAnswer[index4] != null}"><span :class="{'mark': topic[4][index4].isMark == true}"></span>{{topicCount[0]+topicCount[1]+topicCount[2]+index4+1}}</a>
+                    <a href="javascript:;" @click="essay(index4)" :class="{'border': index == index4 && currentType == 4,'bg': essayBGFlag[index4] ? true : false}"><span :class="{'mark': topic[4][index4].isMark == true}"></span>{{topicCount[0]+topicCount[1]+topicCount[2]+index4+1}}</a>
                   </li>
                 </ul>
               </div> 
@@ -116,7 +117,8 @@
                 <el-input placeholder="请填在此处"
                   v-model="fillAnswer[index][currentIndex]"
                   clearable
-                  @blur="fillBG">
+                  @change="fillBG"
+                  >
                 </el-input>
               </div>
               <div class="analysis" v-if="isPractice">
@@ -146,7 +148,7 @@
               </div>
             </div>
             <!-- 问答题 -->
-            <div class="essay" v-if="currentType == 4">
+            <div class="essay" v-if="currentType == 4" >
               <!-- <div v-for="(item,currentIndex) in part" :key="currentIndex">
                 <el-input placeholder="请填在此处"
                   v-model="fillAnswer[index][currentIndex]"
@@ -154,22 +156,22 @@
                   @blur="fillBG">
                 </el-input> 
                 </div>-->
-                <a-textarea v-model:value="essayAnswer[index]" show-count :maxlength="5000" placeholder="请填写您的答案" />
+                <a-textarea @change="essayBG" v-model:value="essayAnswer[index]" show-count :maxlength="5000" placeholder="请填写您的答案" />
               
-              <div class="analysis" v-if="isPractice">
+              <!-- <div class="analysis" v-if="isPractice">
                 <ul>
                   <li> <el-tag type="success">正确姿势：</el-tag><span class="right">{{topic[4][index].answer}}</span></li>
                   <li><el-tag>题目解析：</el-tag></li>
                   <li>{{topic[2][index].analysis == null ? '暂无解析': topic[4][index].analysis}}</li>
                 </ul>
-              </div>
+              </div> -->
             </div>
           </div>
           <div class="operation">
             <ul class="end">
-              <li @click="previous()"><i class="iconfont icon-previous"></i><span>上一题</span></li>
-              <li @click="mark()"><i class="iconfont icon-mark-o"></i><span>标记</span></li>
-              <li @click="next()"><span>下一题</span><i class="iconfont icon-next"></i></li>
+              <li @click="previous()"><left-outlined /><span>上一题</span></li>
+              <li @click="mark()"><aim-outlined /><span>标记</span></li>
+              <li @click="next()"><span>下一题</span><right-outlined /></li>
             </ul>
           </div>
         </div>
@@ -183,7 +185,7 @@ import { request } from '@/utils/request'
 import store from '@/store/index'
 import {mapState} from 'vuex'
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { createFromIconfontCN,HourglassOutlined } from '@ant-design/icons-vue';
+import { createFromIconfontCN,HourglassOutlined,RightOutlined,LeftOutlined,AimOutlined } from '@ant-design/icons-vue';
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_3260262_ji93tnzull.js',
 });
@@ -192,7 +194,11 @@ export default {
   store,
   components: {
     IconFont,
-    HourglassOutlined
+    HourglassOutlined,
+    RightOutlined,
+    LeftOutlined,
+    AimOutlined
+    
 },
   data() {
     return {
@@ -229,13 +235,19 @@ export default {
       judgeAnswer: [], //保存所有判断题答案
       essayAnswer: [],
       topic1Answer: [],  //学生选择题作答编号,
-      rightAnswer: ''
+      rightAnswer: '',
+      essayBGFlag: []
     }
   },
   created() {
     this.getCookies()
     this.getExamData()
     this.showTime()
+    window.addEventListener('beforeunload', e => this.beforeunloadHandler(e))
+
+  },
+  destroyed() {
+    window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
   },
   beforeRouteLeave (to, from, next) {
   // ... 
@@ -253,6 +265,10 @@ export default {
    }
   },
   methods: {
+    beforeunloadHandler(e){
+      e = e || window.event;
+      return '关闭提示';
+    },
     getMyTime(date) { //日期格式化
       let year = date.getFullYear()
       let month= date.getMonth()+ 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
@@ -290,6 +306,7 @@ export default {
               }
             }).then(res => {
               this.topic = {...res.data.data}
+              console.log("题目",this.topic)
               let reduceAnswer = this.topic[1][this.index];
               console.log("reduceAnswer",reduceAnswer)
               this.reduceAnswer = reduceAnswer;
@@ -347,18 +364,29 @@ export default {
       }
     },
     fillBG() { //填空题已答题目 如果已答该题目,设置第四个元素为true为标识符
-      if(this.fillAnswer[this.index][0] != null) {
-        this.fillAnswer[this.index][3] = true
+      if(this.fillAnswer[this.index][0] == null || this.fillAnswer[this.index][0] == "" ) {
+        this.fillAnswer[this.index][3] = false
+      } else {
+        this.fillAnswer[this.index][3] = true;
+      }
+    },
+    essayBG(){
+      if(this.essayAnswer[this.index] == null || this.essayAnswer[this.index] == ""){
+        this.essayBGFlag[this.index] = false;
+      } else {
+        this.essayBGFlag[this.index] = true;
       }
     },
     fill(index) { //填空题
       let len = this.topic[2].length
       this.currentType = 2
       this.index = index
-      if(index < len) {
-        if(index < 0) {
-          index = this.topic[1].length -1
-          this.judge(index)
+      if(this.index < len) {
+        console.log("现在的index",this.index)
+        if(this.index < 0) {
+          this.index = this.topic[3].length -1
+          console.log("index",this.index)
+          this.judge(this.index)
         }else {
           console.log(`总长度${len}`)
           console.log(`当前index:${index}`)
@@ -377,12 +405,14 @@ export default {
       }
     },
     judge(index) { //判断题
+    console.log("进入判断题时的index",index)
       let len = this.topic[3].length
       this.currentType = 3
       this.index = index
+      console.log("判断题中的当前index",this.index)
       if(this.index < len) {
         if(this.index < 0){
-          this.index = this.topic[2].length - 1
+          this.index = this.topic[1].length - 1
           this.change(this.index)
         }else {
           console.log(`总长度${len}`)
@@ -443,7 +473,9 @@ export default {
       }
     },
     previous() { //上一题
+    console.log("之前的index",this.index)
       this.index --
+    console.log("减1之后的index",this.index)
       switch(this.currentType) {
         case 1: 
           this.change(this.index)
