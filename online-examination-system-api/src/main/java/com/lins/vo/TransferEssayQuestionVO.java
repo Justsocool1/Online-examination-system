@@ -6,4 +6,5 @@ import lombok.Data;
 public class TransferEssayQuestionVO {
     private String question;
     private String stuAnswer;
+    private Integer score;
 }

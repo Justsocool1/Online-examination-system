@@ -31,7 +31,7 @@
         <a-textarea v-model:value="item.stuAnswer" :readonly="true"/>
       </a-form-item>
       <a-form-item label="分数">
-        <a-input-number v-model:value="score[index]" precision="1" min="0" max="40"/>
+        <a-input-number v-model:value="score[index]" precision="1" min="0" :max="item.score"/>
       </a-form-item>
     </template>
     <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
@@ -87,6 +87,7 @@ export default {
         resData.forEach((element) => {
           this.essayQuestions.push(element);
         });
+        console.log("问答题",this.essayQuestions)
       });
     },
     commit() {

@@ -131,7 +131,7 @@
             </div>
             <!-- 判断题 -->
             <div class="judge" v-if="currentType == 3">
-              <el-radio-group v-model="judgeAnswer[index]" @change="getJudgeLabel" v-if="currentType == 3">
+              <el-radio-group v-model="judgeAnswer[index]" @change="getJudgeValue" v-if="currentType == 3">
                 <el-radio :label="1">正确</el-radio>
                 <el-radio :label="2">错误</el-radio>
               </el-radio-group>
@@ -586,10 +586,12 @@ export default {
       eqs.forEach(e => {
         let essayQuestion = {
           questionId: "",
-          stuAnswer: ""
+          stuAnswer: "",
+          score: ""
         }
         essayQuestion.questionId = e.questionId;
         essayQuestion.stuAnswer = this.essayAnswer[i];
+        essayQuestion.score = e.score;
         essayQuestions.push(essayQuestion);
         i++;
       })

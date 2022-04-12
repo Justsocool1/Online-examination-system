@@ -77,6 +77,7 @@ public class ExamServiceImpl implements ExamService {
             transferEssayQuestion.setTeqId(teqId);
             transferEssayQuestion.setQuestionId(essayQuestion.getQuestionId());
             transferEssayQuestion.setStuAnswer(essayQuestion.getStuAnswer());
+            transferEssayQuestion.setScore(essayQuestion.getScore());
             int rs = examMapper.insertStuExam(transferEssayQuestion);
 
             if (result != 1 && rs != 1) {

@@ -99,8 +99,8 @@
     </select>
 
     <insert id="insertStuExam">
-        insert into transfer_essay_question (teqId, questionId, stuAnswer)
-        values (#{teqId}, #{questionId}, #{stuAnswer})
+        insert into transfer_essay_question (teqId, questionId, stuAnswer,score)
+        values (#{teqId}, #{questionId}, #{stuAnswer},#{score})
     </insert>
 
     <insert id="addExam">
@@ -131,7 +131,7 @@
     </insert>
 
     <select id="getEssays" resultType="com.lins.vo.TransferEssayQuestionVO">
-        select e.question, teq.stuAnswer
+        select e.question, teq.stuAnswer, teq.score
         from transfer_essay_question as teq
                  join essay_question as e on teq.questionId = e.questionId
         where teq.teqId = #{teqId}

@@ -67,12 +67,6 @@ export default {
                                                           answerDate: e.answerDate}})
         }
         })
-
-    //   this.$axios(`/api/exam/${examCode}`).then(res => { //根据试卷id请求后台
-    //     if(res.data.code == 200) {
-    //       this.form = res.data.data
-    //     }
-    //   })
     },
     handleClose(done) { //关闭提醒
       this.$confirm('确认关闭？')
