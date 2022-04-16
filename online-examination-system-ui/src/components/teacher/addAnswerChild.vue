@@ -483,35 +483,6 @@ export default {
         }).then(res =>{
 
         })
-    //   this.$axios({
-    //     url: '/api/item',
-    //     method: 'post',
-    //     data: {
-    //       changeNumber: this.changeNumber,
-    //       fillNumber: this.fillNumber,
-    //       judgeNumber: this.judgeNumber,
-    //       paperId: this.paperId,
-    //       subject: this.subject //题目数量太少，指定为计算机网络出题
-    //     }
-    //   }).then(res => {
-    //     console.log(res)
-    //     let data = res.data
-    //     if(data.code==200){
-    //       setTimeout(() => {
-    //         this.$router.push({path: '/selectAnswer'})
-    //       },1000)
-    //        this.$message({
-    //         message: data.message,
-    //         type: 'success'
-    //       })
-    //     }else if(data.code==400){
-    //         this.$message({
-    //         message: data.message,
-    //         type: 'error'
-    //       })
-    //     }
-
-    //   })
     },
     getParams() {
       let subject = this.$route.query.subject //获取试卷名称
@@ -586,35 +557,6 @@ export default {
       }).catch((err) => {
           
       });
-    //   this.$axios({
-    //     url: '/api/fillQuestion',
-    //     method: 'post',
-    //     data: {
-    //       ...this.postFill
-    //     }
-    //   }).then(res => {
-    //     let status = res.data.code
-    //     if(status == 200) {
-    //       this.$message({
-    //         message: '已添加到题库',
-    //         type: 'success'
-    //       })
-    //       this.postFill = {}
-    //     }
-    //   }).then(() => {
-    //     this.$axios(`/api/fillQuestionId`).then(res => { //获取当前题目的questionId
-    //       let questionId = res.data.data.questionId
-    //       this.postPaper.questionId = questionId
-    //       this.postPaper.questionType = 2
-    //       this.$axios({
-    //         url: '/api/paperManage',
-    //         method: 'Post',
-    //         data: {
-    //           ...this.postPaper
-    //         }
-    //       })
-    //     })
-    //   })
     },
     judgeSubmit() { //判断题提交
       this.postJudge.subject = this.subject
@@ -634,35 +576,7 @@ export default {
       }).catch((err) => {
           
       });
-    //   this.$axios({
-    //     url: '/api/judgeQuestion',
-    //     method: 'post',
-    //     data: {
-    //       ...this.postJudge
-    //     }
-    //   }).then(res => {
-    //     let status = res.data.code
-    //     if(status == 200) {
-    //       this.$message({
-    //         message: '已添加到题库',
-    //         type: 'success'
-    //       })
-    //       this.postJudge = {}
-    //     }
-    //   }).then(() => {
-    //     this.$axios(`/api/judgeQuestionId`).then(res => { //获取当前题目的questionId
-    //       let questionId = res.data.data.questionId
-    //       this.postPaper.questionId = questionId
-    //       this.postPaper.questionType = 3
-    //       this.$axios({
-    //         url: '/api/paperManage',
-    //         method: 'Post',
-    //         data: {
-    //           ...this.postPaper
-    //         }
-    //       })
-    //     })
-    //   })
+
     },
     essaySubmit(){ //问答题提交
         this.postEssay.subject = this.subject;

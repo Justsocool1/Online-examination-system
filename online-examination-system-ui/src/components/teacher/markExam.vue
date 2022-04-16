@@ -126,12 +126,6 @@ export default {
       }).then(res => {
         this.$router.push({path: "/index/markExamPapers"})
       })
-        // this.$axios({
-        //   url: `/api/exam/${examCode}`,
-        //   method: 'delete',
-        // }).then(res => {
-        //   this.getExamInfo()
-        // })
       }).catch(() => {
 
       })
