@@ -205,6 +205,7 @@ export default {
       startTime: null, //考试开始时间
       endTime: null, //考试结束时间
       time: null, //考试持续时间
+      timer: null, //定时器
       reduceAnswer:[],  //vue官方不支持3层以上数据嵌套,如嵌套则会数据渲染出现问题,此变量直接接收3层嵌套时的数据。
       answerScore: 0, //答题总分数
       bg_flag: false, //已答标识符,已答改变背景色
@@ -249,6 +250,11 @@ export default {
   destroyed() {
     window.removeEventListener('beforeunload', e => this.beforeunloadHandler(e))
   },
+
+  // beforeDestroy() {
+  //   clearInterval(this.timer);        
+  //           this.timer = null;
+  // },
   beforeRouteLeave (to, from, next) {
   // ... 
   console.log("离开页面")
@@ -641,24 +647,62 @@ export default {
           console.log("继续答题")
         })
       }
+      if(this.time == 0){
+        console.log("强制交卷")
+          let date = new Date()
+          this.endTime = this.getMyTime(date)
+          let answerDate = this.endTime.substr(0,10)
+
+          console.log("交卷数据",this.examData)
+          let subject = this.examData.source;
+          
+          //提交成绩信息
+         request({
+            url: '/exam/pushToTeacher',
+            method: 'post',
+            data: {
+              examCode: this.examData.examCode, //考试编号
+              studentId: this.userInfo.id, //学号
+              studentName: this.userInfo.name, //学生姓名
+              subject: subject, //课程名称
+              noEssayScore: finalScore, //除问答题以外计算出的成绩
+              answerDate: answerDate, //答题日期
+              startTime: this.startTime,  //开始时间
+              endTime: this.endTime, //结束时间
+              essayQuestions: essayQuestions,  //问答题
+            }
+          }).then(res => {
+            if(res.data.success){
+            this.$router.push({path: "/result"})
+            return 1;
+            } else {
+              console.log(res.data.message);
+            this.$router.push({path: "/failResult"})
+            return 0;
+            }
+
+          })
+      }
     },
     showTime() { //倒计时
-      setInterval(() => {
-        this.time -= 1
-        if(this.time == 30) {
-          this.$message({
-            showClose: true,
-            type: 'error',
-            message: '考生注意,考试时间还剩30分钟！！！'
-          })
-          if(this.time == 0) {
-            console.log("考试时间已到,强制交卷。")
-          }
+    console.log("倒计时=============")
+     this.timer = setInterval(() => {
+        if(this.time !=0){
+          this.time -= 1
         }
+        console.log("时间还剩",this.time)
+        if(this.time == 30) {
+          ElMessage.error("考生注意,考试时间还剩30分钟！！！");
+        }
+        if(this.time === 0) {
+            console.log("考试时间已到,强制交卷。")
+          ElMessage.error("考试结束，强制交卷！");
+            clearInterval(this.timer);
+            this.timer = null;
+            this.commit();
+          }
       },1000 * 60)
     },
-   
-
   },
   
   computed:mapState(["isPractice"]),

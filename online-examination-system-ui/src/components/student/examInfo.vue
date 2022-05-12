@@ -42,7 +42,7 @@
     <a-collapse-panel key="1" header="考试详情">
       <div class="title">
               <span>考试科目: {{examData.source}}</span><i class="header-icon el-icon-info"></i>
-              <span class="time">总分：{{examData.totalScore}}分  考试时间: {{examData.totalTime}}分钟 </span>
+              <span class="time">总分：{{score[0]+score[1]+score[2]+score[3]}}分  考试时间: {{examData.totalTime}}分钟 </span>
             </div>
 
 <div class="titlei">考试时间：{{this.examStartTime}} - {{getEndTime(this.examStartTime)}}</div>
@@ -116,7 +116,8 @@ export default {
           // let nowTime = new Date();
           await this.getRealTime();
           console.log("now",this.nowTime);
-          this.nowTime = this.parseDate("2019/3/21 16:01:00");
+          // this.nowTime = this.parseDate("2019/3/21 16:01:00");
+          this.nowTime = this.parseDate("2022/5/12 19:37:00");
 
           this.examStartFlag = this.comparingDate(startTime,this.nowTime);
 

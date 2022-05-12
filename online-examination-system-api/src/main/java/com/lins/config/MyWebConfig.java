@@ -7,6 +7,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class MyWebConfig implements WebMvcConfigurer {
@@ -32,6 +34,13 @@ public class MyWebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 //        WebMvcConfigurer.super.addInterceptors(registry);
         // 添加自定义拦截器，并拦截对应 url"
-        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/user/login");
+        List<String> excludePathPatterns = new ArrayList<String>();
+        excludePathPatterns.add("/user/login");
+        excludePathPatterns.add("/user/register");
+        excludePathPatterns.add("/user/getInstitutes");
+        excludePathPatterns.add("/user/getMajorsByInstituteId");
+        excludePathPatterns.add("/user/getClassesByMajorId");
+        excludePathPatterns.add("/user/getSameId");
+        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns(excludePathPatterns);
     }
 }
