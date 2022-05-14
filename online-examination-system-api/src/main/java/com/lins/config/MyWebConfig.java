@@ -41,6 +41,7 @@ public class MyWebConfig implements WebMvcConfigurer {
         excludePathPatterns.add("/user/getMajorsByInstituteId");
         excludePathPatterns.add("/user/getClassesByMajorId");
         excludePathPatterns.add("/user/getSameId");
+        excludePathPatterns.add("/exam/pushToTeacher");
         registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns(excludePathPatterns);
     }
 }

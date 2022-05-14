@@ -99,20 +99,35 @@ export default defineComponent({
   setup() {
     const formRef = ref();
     const formState = reactive({
-      studentId: "2018666666",
-      studentName: "张三",
-      cardId: "566966666606066666",
-      pass: "123456",
-      checkPass: "123456",
-      sex: "1",
+      studentId: "",
+      studentName: "",
+      cardId: "",
+      pass: "",
+      checkPass: "",
+      sex: "",
       grade: undefined,
       instituteId: undefined,
       majorId: undefined,
       clazzId: undefined,
-      tel: "17666667777",
-      email: "zhangsan@qq.com",
+      tel: "",
+      email: "",
 
     });
+    // const formState = reactive({
+    //   studentId: "2018666666",
+    //   studentName: "张三",
+    //   cardId: "566966666606066666",
+    //   pass: "123456",
+    //   checkPass: "123456",
+    //   sex: "1",
+    //   grade: undefined,
+    //   instituteId: undefined,
+    //   majorId: undefined,
+    //   clazzId: undefined,
+    //   tel: "17666667777",
+    //   email: "zhangsan@qq.com",
+
+    // });
      var items = ref([]);
      var majors = ref([]);
      var clazzes = ref([]);
@@ -209,6 +224,7 @@ export default defineComponent({
         {
           required: true,
           trigger: "change",
+          message: "请选择您的性别"
         },
       ],
       grade: [

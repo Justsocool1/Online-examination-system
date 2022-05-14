@@ -8,7 +8,7 @@
           v-model="studentId"
           class="w-50 m-2"
           size="large"
-          placeholder="Please Input1"
+          placeholder=""
           :suffix-icon="Search"
           @keydown.enter="search()"
         />
@@ -19,7 +19,7 @@
           v-model="studentName"
           class="w-50 m-2"
           size="large"
-          placeholder="Please Input2"
+          placeholder=""
           :suffix-icon="Search"
           @keydown.enter="search()"
         />

@@ -116,8 +116,8 @@ export default {
           // let nowTime = new Date();
           await this.getRealTime();
           console.log("now",this.nowTime);
-          // this.nowTime = this.parseDate("2019/3/21 16:01:00");
-          this.nowTime = this.parseDate("2022/5/12 19:37:00");
+          this.nowTime = this.parseDate("2019/3/21 16:01:00");
+          // this.nowTime = this.parseDate("2022/5/12 19:37:00");
 
           this.examStartFlag = this.comparingDate(startTime,this.nowTime);
 

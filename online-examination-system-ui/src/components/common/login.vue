@@ -60,13 +60,14 @@ const IconFont = createFromIconfontCN({
 export default {
   store,
   name: "login",
+  // 20154084
   data() {
     return {
       labelPosition: 'left',
       formLabelAlign: {
-        userId: '20154084',
-        password: '123456',
-        role: '2'
+        userId: '',
+        password: '',
+        role: ''
       },
       ruleForm: {
           userId: '',

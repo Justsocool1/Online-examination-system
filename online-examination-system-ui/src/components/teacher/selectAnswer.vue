@@ -9,7 +9,7 @@
       v-model="examName"
       class="w-50 m-2"
       size="large"
-      placeholder="Please Input1"
+      placeholder=""
       :suffix-icon="Search"
       @keydown.enter="search()"
     />
@@ -20,7 +20,7 @@
       v-model="section"
       class="w-50 m-2"
       size="large"
-      placeholder="Please Input2"
+      placeholder=""
       :suffix-icon="Search"
       @keydown.enter="search()"
     />
@@ -31,7 +31,7 @@
       v-model="questionType"
       class="w-50 m-2"
       size="large"
-      placeholder="Please Input3"
+      placeholder=""
       :suffix-icon="Search"
       @keydown.enter="search()"
     />
@@ -42,7 +42,7 @@
       v-model="level"
       class="w-50 m-2"
       size="large"
-      placeholder="Please Input4"
+      placeholder=""
       :suffix-icon="Search"
       @keydown.enter="search()"
     />
