@@ -65,9 +65,9 @@ export default {
     return {
       labelPosition: 'left',
       formLabelAlign: {
-        userId: '',
-        password: '',
-        role: ''
+        userId: '20154084',
+        password: '123456',
+        role: '2'
       },
       ruleForm: {
           userId: '',
