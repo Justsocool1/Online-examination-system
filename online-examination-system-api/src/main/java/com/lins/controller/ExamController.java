@@ -1,11 +1,12 @@
 package com.lins.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lins.common.EssayQuestionToTeacherCommon;
 import com.lins.common.ResponseResult;
-import com.lins.entity.*;
+import com.lins.entity.ExamManage;
+import com.lins.entity.Institute;
+import com.lins.entity.Major;
 import com.lins.service.ExamService;
 import com.lins.service.PaperSerivce;
 import com.lins.service.UserService;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,33 +35,6 @@ public class ExamController {
 
     @Resource
     private PaperSerivce paperSerivce;
-
-//    @GetMapping("/getExams/{examName}")
-//    public ResponseResult getExams(@PathVariable("examName") String examName) {
-//        Page<ExamManage> examPage = new Page<>(1,6);
-//        if ("null".equals(examName) | "".equals(examName.trim())) {
-//            IPage<ExamManage> examList = examService.getExamsByPage(examPage);
-//            if (!examList.getRecords().isEmpty()) {
-//                return new ResponseResult(200, true, "", examList);
-//            } else {
-//                return new ResponseResult(404, false, "获取试卷失败！", null);
-//            }
-//        } else {
-//            IPage<ExamManage> examList = examService.getExamsLikeName(examPage,examName);
-//            if (!examList.getRecords().isEmpty()) {
-//                return new ResponseResult(200, true, "", examList);
-//            } else {
-//                return new ResponseResult(404, false, "获取试卷失败！", null);
-//            }
-//        }
-//    }
-//
-//    @GetMapping("/getExams/{page}/{size}")
-//    public ResponseResult getExamByPage(@PathVariable("page") Integer page,@PathVariable("size") Integer size){
-//        Page<ExamManage> examManagePage = new Page<>(page, size);
-//        IPage<ExamManage> examManageIPage = examService.getExamsByPage(examManagePage);
-//        return new ResponseResult(200,true,"请求成功！",examManageIPage);
-//    }
 
     @GetMapping("/getExams/{page}/{size}/{examName}")
     public ResponseResult getExams(@PathVariable("page") Integer page, @PathVariable("size") Integer size, @PathVariable("examName") String examName) {
@@ -186,7 +159,6 @@ public class ExamController {
         boolean result = examService.deleteExamByExamCode(examCode);
 
 
-
         if (result && rs) {
             return new ResponseResult(200, true, "", null);
         }
@@ -196,7 +168,7 @@ public class ExamController {
     }
 
     @GetMapping("/getNetworkTime")
-    public ResponseResult getNetworkTime(){
+    public ResponseResult getNetworkTime() {
         try {
             // 取得资源对象
             URL url = new URL("https://www.baidu.com");
@@ -205,12 +177,10 @@ public class ExamController {
             uc.connect();
             // 读取网站日期时间
             Long ld = uc.getDate();
-            Date date = new Date(ld);
-            System.out.println(date.toString());
-            return new ResponseResult(200,true,"",ld);
+            return new ResponseResult(200, true, "", ld);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new ResponseResult(404,false,"",null);
+        return new ResponseResult(404, false, "", null);
     }
 }
